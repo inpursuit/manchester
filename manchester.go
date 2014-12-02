@@ -1,5 +1,7 @@
 package manchester
 
+//import "fmt"
+
 const preamble_len = 16
 const long_frame = 112
 const short_frame = 56
@@ -119,11 +121,14 @@ func Manchester(buf []uint16) {
   var i2, errors int
   var maximum_i int = len(buf)-1
 
+  //fmt.Printf("length of array is %d\n",len(buf))
   for i := 0; i<maximum_i; {
     for ;i<(len(buf)-preamble_len); i++ {
       if !preamble(buf, i) {
+        //fmt.Printf("  not preamble\n")
         continue;
       }
+      //fmt.Printf("  FOUND PREAMBLE!\n")
       a = buf[i]
       b = buf[i+1]
       for i2 := 0; i2<preamble_len; i2++ {
@@ -135,11 +140,14 @@ func Manchester(buf []uint16) {
     i2 = i
     errors = 0
 
+    //fmt.Printf("i,i2 %d,%d\n",i,i2)
     for i<maximum_i {
       bit = single_manchester(a, b, buf[i], buf[i+1])
       a = buf[i]
       b = buf[i+1]
+      //fmt.Printf("a,b,bit: %b,%b,%b\n",a,b,bit)
       if bit == BADSAMPLE {
+        //fmt.Printf("  BADSAMPLE\n")
         errors++
         if errors > allowed_errors {
           buf[i2] = BADSAMPLE
@@ -157,6 +165,7 @@ func Manchester(buf []uint16) {
       buf[i] = OVERWRITE
       buf[i+1] = OVERWRITE
       buf[i2] = bit
+      //fmt.Printf("  putting data at index %d\n",i2)
       i+=2
       i2++
     }
