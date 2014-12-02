@@ -1,7 +1,7 @@
 package manchester
 
 import "testing"
-//import "fmt"
+import "fmt"
 
 func TestManchester(t *testing.T) {
   var preamble []uint16 = []uint16{1,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0}
@@ -13,7 +13,7 @@ func TestManchester(t *testing.T) {
 
   //fmt.Printf("%X\n",withpre)    
   Manchester(withpre[:])
-  //fmt.Printf("%X\n",withpre)
+  fmt.Printf("%X\n",withpre)
   preslice := withpre[:16]
   dataslice := withpre[16:24]
   postdata := withpre[24:]

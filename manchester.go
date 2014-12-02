@@ -3,20 +3,12 @@ package manchester
 //import "fmt"
 
 const preamble_len = 16
-const long_frame = 112
-const short_frame = 56
 const allowed_errors = 5
 const quality = 10
 
 const MESSAGEGO = 253
 const OVERWRITE = 254
 const BADSAMPLE = 255
-
-var squares []uint16 = make([]uint16, 256)
-
-func init() {
-  squares_precompute()
-}
 
 func preamble(buf []uint16, i int) bool {
   var low, high uint16 = 0, 65535
@@ -39,34 +31,12 @@ func preamble(buf []uint16, i int) bool {
 func bool_to_int(a bool) uint16 {
   if a {
     return 1
-  } else { 
+  } else {
     return 0
   }
 }
 
-func abs8(x int) uint8 {
-  if x >= 127 {
-    return uint8(x - 127)
-  } else {
-    return uint8(127 - x)
-  }
-}
-
-func squares_precompute() {
-  var j uint8
-  for i := 0; i<256; i++ {
-    j = abs8(i)
-    squares[i] = uint16(j*j)
-  }
-}
-
-func magnitute(buf []uint) {
-  for i := 0; i<len(buf); i+=2 {
-    buf[i] = uint(squares[buf[i]] + squares[buf[i+1]])
-  }
-}
-
-func single_manchester(a, b, c, d uint16) uint16 {
+func single_manchester(a, b, c, d uint16 ) uint16 {
   var bit, bit_p bool
   bit_p = a > b
   bit   = c > d
